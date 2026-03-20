@@ -1,0 +1,111 @@
+:root {
+  --bg: #0a0a0a;
+  --bg-2: #111111;
+  --bg-3: #1a1a1a;
+  --border: #2a2a2a;
+  --border-bright: #3d3d3d;
+  --text: #e8e8e8;
+  --text-muted: #666;
+  --text-dim: #444;
+  --accent: #00ff88;
+  --accent-dim: rgba(0, 255, 136, 0.12);
+  --accent-glow: rgba(0, 255, 136, 0.3);
+  --red: #ff3b3b;
+  --red-dim: rgba(255, 59, 59, 0.12);
+  --yellow: #ffcc00;
+  --yellow-dim: rgba(255, 204, 0, 0.12);
+  --blue: #4488ff;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --radius: 2px;
+  --transition: 150ms ease;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-2); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* Base elements */
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+  font-family: var(--mono);
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input, textarea, select {
+  font-family: var(--mono);
+  font-size: 13px;
+  outline: none;
+}
+
+/* Utility classes */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  border: 1px solid currentColor;
+}
+
+.tag-green { color: var(--accent); background: var(--accent-dim); }
+.tag-red { color: var(--red); background: var(--red-dim); }
+.tag-yellow { color: var(--yellow); background: var(--yellow-dim); }
+.tag-blue { color: var(--blue); background: rgba(68,136,255,0.12); }
+
+/* Scan lines effect */
+.scanlines::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.04) 2px,
+    rgba(0,0,0,0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Fade transition */
+.fade-enter-active, .fade-leave-active { transition: opacity 200ms ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+/* Slide-up transition */
+.slide-up-enter-active { transition: all 300ms ease; }
+.slide-up-leave-active { transition: all 200ms ease; }
+.slide-up-enter-from { opacity: 0; transform: translateY(12px); }
+.slide-up-leave-to { opacity: 0; transform: translateY(-8px); }
