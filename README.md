@@ -1,8 +1,8 @@
 # introduction
 
-A Claude.ai based UI, for my [Winget_Server_API](https://github.com/cheapgriffy/Winget-Serv-Server) as a test for claude capabilities.
-Sadly to get a live view of available ``winget`` packages,
-Would be hard to implement cause want to put that inside a bash based machine
+A Claude based UI, for the [Winget_Server_API](https://github.com/cheapgriffy/Winget-Serv-Server) repo as a prototype for testing API usage
+and benchmarking claude capabilities.
+Consider this a temporary front end for Winget_Server_API
 
 # Winget-Serv UI
 
@@ -22,6 +22,9 @@ npm run dev
 ```bash
 npm run build
 ```
+
+This will generate a ``./dist/`` file on your project directory,
+Use this to host it on you're web-server of choice
 
 ## Project structure
 
