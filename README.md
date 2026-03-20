@@ -1,3 +1,9 @@
+# introduction
+
+A Claude.ai based UI, for my [Winget_Server_API](https://github.com/cheapgriffy/Winget-Serv-Server) as a test for claude capabilities.
+Sadly to get a live view of available ``winget`` packages,
+Would be hard to implement cause want to put that inside a bash based machine
+
 # Winget-Serv UI
 
 Vue 3 + Vite frontend for the Winget-Serv API.
