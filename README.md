@@ -22,6 +22,7 @@ npm run dev
 ```bash
 npm run build
 ```
+#### 💡 Do not forget to edit .env-template values before building
 
 This will generate a ``./dist/`` file on your project directory,
 Use this to host it on you're web-server of choice
