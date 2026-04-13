@@ -26,6 +26,7 @@ npm run build
 
 This will generate a ``./dist/`` file on your project directory,
 Use this to host it on you're web-server of choice
+*This were only tested on Apache2 for now, contact me if you're having troubles with other webservers*
 
 ## Project structure
 
