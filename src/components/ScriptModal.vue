@@ -37,6 +37,15 @@
           <div class="editor-header">
             <label class="field-label">SCRIPT LINES <span class="required">*</span></label>
             <div class="editor-actions">
+              <input
+                ref="fileInput"
+                type="file"
+                style="display: none"
+                accept=".ps1,.txt"
+                @change="handleImport"
+              />
+              <button type="button" class="icon-btn" @click="triggerFileInput" title="Import from file">IMPORT</button>
+              <button type="button" class="icon-btn" @click="exportToFile" title="Download as .ps1">EXPORT</button>
               <button type="button" class="icon-btn" @click="addLine" title="Add line">+ ADD LINE</button>
             </div>
           </div>
@@ -100,6 +109,41 @@ const form = reactive({
   description: props.script?.description || '',
   content: props.script?.content?.length ? [...props.script.content] : ['']
 })
+
+const fileInput = ref(null)
+
+function triggerFileInput() {
+  fileInput.value.click()
+}
+
+function handleImport(e) {
+  const file = e.target.files[0]
+  if (!file) return
+
+  const reader = new FileReader()
+  reader.onload = (res) => {
+    const text = res.target.result
+    const lines = text.split(/\r?\n/)
+    form.content = lines.length ? lines : ['']
+    
+    if (!form.name) {
+      form.name = file.name.replace(/\.[^/.]+$/, "")
+    }
+  }
+  reader.readAsText(file)
+  e.target.value = ''
+}
+
+function exportToFile() {
+  const content = form.content.join('\n')
+  const blob = new Blob([content], { type: 'text/plain' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${form.name || 'script'}.ps1`
+  a.click()
+  URL.revokeObjectURL(url)
+}
 
 function addLine() {
   form.content.push('')
