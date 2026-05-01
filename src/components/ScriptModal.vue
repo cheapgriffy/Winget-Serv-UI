@@ -16,34 +16,20 @@
 
         <div class="field">
           <label class="field-label">NAME <span class="required">*</span></label>
-          <input
-            v-model="form.name"
-            class="field-input"
-            placeholder="my-setup-script"
-            required
-          />
+          <input v-model="form.name" class="field-input" placeholder="my-setup-script" required />
         </div>
 
         <div class="field">
           <label class="field-label">DESCRIPTION <span class="optional">(optional)</span></label>
-          <input
-            v-model="form.description"
-            class="field-input"
-            placeholder="Brief description of what this script does"
-          />
+          <input v-model="form.description" class="field-input"
+            placeholder="Brief description of what this script does" />
         </div>
 
         <div class="field">
           <div class="editor-header">
             <label class="field-label">SCRIPT LINES <span class="required">*</span></label>
             <div class="editor-actions">
-              <input
-                ref="fileInput"
-                type="file"
-                style="display: none"
-                accept=".ps1,.txt"
-                @change="handleImport"
-              />
+              <input ref="fileInput" type="file" style="display: none" accept=".ps1,.txt" @change="handleImport" />
               <button type="button" class="icon-btn" @click="triggerFileInput" title="Import from file">IMPORT</button>
               <button type="button" class="icon-btn" @click="exportToFile" title="Download as .ps1">EXPORT</button>
               <button type="button" class="icon-btn" @click="addLine" title="Add line">+ ADD LINE</button>
@@ -51,26 +37,15 @@
           </div>
 
           <div class="script-editor">
-            <div
-              v-for="(line, i) in form.content"
-              :key="i"
-              class="script-line"
-            >
+            <div v-for="(line, i) in form.content" :key="i" class="script-line" draggable="true"
+              @dragstart="startDrag(i)" @dragover.prevent="dragOver(i)" @drop.prevent="dropLine(i)" @dragend="endDrag"
+              @dragenter.prevent :class="{ 'dragging': draggedIndex === i, 'drag-over': dragOverIndex === i }">
+              <span class="line-handle" title="Drag to reorder">⋮⋮</span>
               <span class="line-num">{{ String(i + 1).padStart(2, '0') }}</span>
-              <input
-                v-model="form.content[i]"
-                class="line-input"
-                :placeholder="`Write-Host 'Line ${i + 1}'`"
-                @keydown.enter.prevent="insertLineAfter(i)"
-                @keydown.backspace="maybeRemoveLine($event, i)"
-              />
-              <button
-                v-if="form.content.length > 1"
-                type="button"
-                class="line-remove"
-                @click="removeLine(i)"
-                title="Remove line"
-              >✕</button>
+              <input v-model="form.content[i]" class="line-input" :placeholder="`Write-Host 'Line ${i + 1}'`"
+                @keydown.enter.prevent="insertLineAfter(i)" @keydown.backspace="maybeRemoveLine($event, i)" />
+              <button v-if="form.content.length > 1" type="button" class="line-remove" @click="removeLine(i)"
+                title="Remove line">✕</button>
             </div>
 
             <button type="button" class="add-line-btn" @click="addLine">
@@ -103,6 +78,8 @@ const emit = defineEmits(['close', 'submit'])
 const isEdit = !!props.script
 const submitting = ref(false)
 const formError = ref('')
+const draggedIndex = ref(null)
+const dragOverIndex = ref(null)
 
 const form = reactive({
   name: props.script?.name || '',
@@ -125,7 +102,7 @@ function handleImport(e) {
     const text = res.target.result
     const lines = text.split(/\r?\n/)
     form.content = lines.length ? lines : ['']
-    
+
     if (!form.name) {
       form.name = file.name.replace(/\.[^/.]+$/, "")
     }
@@ -165,6 +142,29 @@ function maybeRemoveLine(e, i) {
   }
 }
 
+function startDrag(i) {
+  draggedIndex.value = i
+}
+
+function dragOver(i) {
+  dragOverIndex.value = i
+}
+
+function dropLine(i) {
+  if (draggedIndex.value !== null && draggedIndex.value !== i) {
+    const draggedLine = form.content[draggedIndex.value]
+    form.content.splice(draggedIndex.value, 1)
+    form.content.splice(i, 0, draggedLine)
+  }
+  draggedIndex.value = null
+  dragOverIndex.value = null
+}
+
+function endDrag() {
+  draggedIndex.value = null
+  dragOverIndex.value = null
+}
+
 async function handleSubmit() {
   formError.value = ''
   const lines = form.content.filter(l => l.trim() !== '')
@@ -194,7 +194,7 @@ async function handleSubmit() {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -215,8 +215,15 @@ async function handleSubmit() {
 }
 
 @keyframes modal-in {
-  from { opacity: 0; transform: scale(0.96) translateY(8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modal-header {
@@ -225,18 +232,21 @@ async function handleSubmit() {
   padding-bottom: 20px;
   margin-bottom: 24px;
 }
+
 .modal-title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 6px;
 }
+
 .modal-label {
   font-family: var(--sans);
   font-size: 16px;
   font-weight: 800;
   letter-spacing: 0.06em;
 }
+
 .modal-close {
   background: transparent;
   color: var(--text-muted);
@@ -244,11 +254,16 @@ async function handleSubmit() {
   padding: 4px 8px;
   transition: color var(--transition);
 }
-.modal-close:hover { color: var(--red); }
+
+.modal-close:hover {
+  color: var(--red);
+}
+
 .modal-sub {
   font-size: 12px;
   color: var(--text-muted);
 }
+
 .modal-sub code {
   color: var(--accent);
   background: var(--accent-dim);
@@ -275,15 +290,27 @@ async function handleSubmit() {
   border-radius: var(--radius);
 }
 
-.field { display: flex; flex-direction: column; gap: 8px; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .field-label {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
   color: var(--text-muted);
 }
-.required { color: var(--accent); }
-.optional { color: var(--text-dim); font-size: 9px; }
+
+.required {
+  color: var(--accent);
+}
+
+.optional {
+  color: var(--text-dim);
+  font-size: 9px;
+}
 
 .field-input {
   padding: 10px 14px;
@@ -294,8 +321,14 @@ async function handleSubmit() {
   font-size: 13px;
   transition: border-color var(--transition);
 }
-.field-input:focus { border-color: var(--accent); }
-.field-input::placeholder { color: var(--text-dim); }
+
+.field-input:focus {
+  border-color: var(--accent);
+}
+
+.field-input::placeholder {
+  color: var(--text-dim);
+}
 
 /* Script editor */
 .editor-header {
@@ -303,7 +336,11 @@ async function handleSubmit() {
   align-items: center;
   justify-content: space-between;
 }
-.editor-actions { display: flex; gap: 8px; }
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+}
 
 .icon-btn {
   background: transparent;
@@ -316,7 +353,10 @@ async function handleSubmit() {
   border-radius: var(--radius);
   transition: all var(--transition);
 }
-.icon-btn:hover { background: var(--accent-dim); }
+
+.icon-btn:hover {
+  background: var(--accent-dim);
+}
 
 .script-editor {
   background: var(--bg);
@@ -329,6 +369,39 @@ async function handleSubmit() {
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--border);
+  transition: all 150ms ease;
+  cursor: grab;
+}
+
+.script-line:active {
+  cursor: grabbing;
+}
+
+.script-line.dragging {
+  opacity: 0.5;
+  background: var(--accent-dim);
+}
+
+.script-line.drag-over {
+  background: rgba(0, 255, 136, 0.08);
+  border-top: 2px solid var(--accent);
+  border-bottom-color: transparent;
+}
+
+.line-handle {
+  width: 24px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-dim);
+  padding: 0 4px;
+  flex-shrink: 0;
+  user-select: none;
+  cursor: grab;
+  transition: color 150ms ease;
+}
+
+.script-line:hover .line-handle {
+  color: var(--accent);
 }
 
 .line-num {
@@ -338,7 +411,7 @@ async function handleSubmit() {
   color: var(--text-dim);
   padding: 0 4px;
   flex-shrink: 0;
-  border-right: 1px solid var(--border);
+  border-left: 1px solid var(--border);
   user-select: none;
 }
 
@@ -350,8 +423,14 @@ async function handleSubmit() {
   font-size: 13px;
   padding: 9px 12px;
 }
-.line-input::placeholder { color: var(--text-dim); }
-.line-input:focus { background: rgba(0, 255, 136, 0.03); }
+
+.line-input::placeholder {
+  color: var(--text-dim);
+}
+
+.line-input:focus {
+  background: rgba(0, 255, 136, 0.03);
+}
 
 .line-remove {
   background: transparent;
@@ -362,7 +441,10 @@ async function handleSubmit() {
   transition: color var(--transition);
   flex-shrink: 0;
 }
-.line-remove:hover { color: var(--red); }
+
+.line-remove:hover {
+  color: var(--red);
+}
 
 .add-line-btn {
   width: 100%;
@@ -375,7 +457,11 @@ async function handleSubmit() {
   transition: all var(--transition);
   text-align: center;
 }
-.add-line-btn:hover { color: var(--accent); background: var(--accent-dim); }
+
+.add-line-btn:hover {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
 
 /* Footer */
 .modal-footer {
@@ -396,7 +482,11 @@ async function handleSubmit() {
   border-radius: var(--radius);
   transition: all var(--transition);
 }
-.btn-secondary:hover { border-color: var(--text-muted); color: var(--text); }
+
+.btn-secondary:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
 
 .btn-primary {
   padding: 10px 24px;
@@ -409,15 +499,25 @@ async function handleSubmit() {
   border-radius: var(--radius);
   transition: all var(--transition);
 }
+
 .btn-primary:hover:not(:disabled) {
   background: #00cc70;
   box-shadow: 0 2px 16px var(--accent-glow);
 }
-.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .spin {
   display: inline-block;
   animation: spin 0.6s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>
