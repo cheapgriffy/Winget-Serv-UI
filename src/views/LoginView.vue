@@ -115,7 +115,7 @@
         <div class="form-footer">
           <span class="footer-label">PipeLine</span>
           <span class="footer-dot">·</span>
-          <span class="footer-label">v0.1.0-wip</span>
+          <span class="footer-label">{{pkg.version}}</span>
         </div>
       </div>
     </div>
@@ -127,6 +127,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 import pipelineLogo from '@/assets/Pipeline_logo.png'
+import pkg from '/package.json'
 
 const auth = useAuthStore()
 const router = useRouter()
