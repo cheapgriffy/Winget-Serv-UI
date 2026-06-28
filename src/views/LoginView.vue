@@ -6,11 +6,9 @@
     <div class="brand-panel">
       <div class="brand-inner">
         <div class="brand-logo">
-          <span class="logo-bracket">[</span>
-          <span class="logo-text">WS</span>
-          <span class="logo-bracket">]</span>
+          <img class="brand-logo-img" :src="pipelineLogo" alt="PipeLine logo" />
         </div>
-        <h1 class="brand-title">WINGET-SERV</h1>
+        <h1 class="brand-title">PipeLine</h1>
         <p class="brand-tagline">One command. Any machine.<br>Your scripts, instantly.</p>
 
         <div class="code-preview">
@@ -20,7 +18,8 @@
           </div>
           <div class="code-body">
             <span class="code-prompt">PS&gt;</span>
-            <span class="code-cmd">irm https://script.cheapgriffy.fr/script/<span class="code-highlight">Jk3xZ2</span></span>
+            <span class="code-cmd">irm https://script.cheapgriffy.fr/script/<span
+                class="code-highlight">Jk3xZ2</span></span>
             <span class="code-op"> | iex</span>
           </div>
         </div>
@@ -39,14 +38,8 @@
         <div class="form-header">
           <h2 class="form-title">{{ isRegister ? 'CREATE ACCOUNT' : 'SIGN IN' }}</h2>
           <div class="form-mode-toggle">
-            <button
-              :class="['mode-btn', { active: !isRegister }]"
-              @click="isRegister = false"
-            >LOGIN</button>
-            <button
-              :class="['mode-btn', { active: isRegister }]"
-              @click="isRegister = true"
-            >REGISTER</button>
+            <button :class="['mode-btn', { active: !isRegister }]" @click="isRegister = false">LOGIN</button>
+            <button :class="['mode-btn', { active: isRegister }]" @click="isRegister = true">REGISTER</button>
           </div>
         </div>
 
@@ -59,26 +52,15 @@
 
             <div class="field">
               <label class="field-label">USERNAME OR EMAIL</label>
-              <input
-                v-model="loginForm.identifier"
-                class="field-input"
-                placeholder="user@example.com"
-                autocomplete="username"
-                required
-              />
+              <input v-model="loginForm.identifier" class="field-input" placeholder="user@example.com"
+                autocomplete="username" required />
             </div>
 
             <div class="field">
               <label class="field-label">PASSWORD</label>
               <div class="input-wrap">
-                <input
-                  v-model="loginForm.password"
-                  :type="showPass ? 'text' : 'password'"
-                  class="field-input"
-                  placeholder="••••••••••"
-                  autocomplete="current-password"
-                  required
-                />
+                <input v-model="loginForm.password" :type="showPass ? 'text' : 'password'" class="field-input"
+                  placeholder="••••••••••" autocomplete="current-password" required />
                 <button type="button" class="pass-toggle" @click="showPass = !showPass">
                   {{ showPass ? 'HIDE' : 'SHOW' }}
                 </button>
@@ -102,38 +84,21 @@
 
             <div class="field">
               <label class="field-label">USERNAME</label>
-              <input
-                v-model="registerForm.username"
-                class="field-input"
-                placeholder="johndoe"
-                autocomplete="off"
-                required
-              />
+              <input v-model="registerForm.username" class="field-input" placeholder="johndoe" autocomplete="off"
+                required />
             </div>
 
             <div class="field">
               <label class="field-label">EMAIL</label>
-              <input
-                v-model="registerForm.email"
-                type="email"
-                class="field-input"
-                placeholder="user@example.com"
-                autocomplete="email"
-                required
-              />
+              <input v-model="registerForm.email" type="email" class="field-input" placeholder="user@example.com"
+                autocomplete="email" required />
             </div>
 
             <div class="field">
               <label class="field-label">PASSWORD</label>
               <div class="input-wrap">
-                <input
-                  v-model="registerForm.password"
-                  :type="showPass ? 'text' : 'password'"
-                  class="field-input"
-                  placeholder="••••••••••"
-                  autocomplete="new-password"
-                  required
-                />
+                <input v-model="registerForm.password" :type="showPass ? 'text' : 'password'" class="field-input"
+                  placeholder="••••••••••" autocomplete="new-password" required />
                 <button type="button" class="pass-toggle" @click="showPass = !showPass">
                   {{ showPass ? 'HIDE' : 'SHOW' }}
                 </button>
@@ -148,9 +113,9 @@
         </transition>
 
         <div class="form-footer">
-          <span class="footer-label">WINGET-SERV</span>
+          <span class="footer-label">PipeLine</span>
           <span class="footer-dot">·</span>
-          <span class="footer-label">v0.1.0-wip</span>
+          <span class="footer-label">{{pkg.version}}</span>
         </div>
       </div>
     </div>
@@ -161,6 +126,8 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
+import pipelineLogo from '@/assets/Pipeline_logo.png'
+import pkg from '/package.json'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -238,22 +205,40 @@ async function handleRegister() {
 .brand-panel::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 
-.brand-inner { max-width: 380px; width: 100%; }
+.brand-inner {
+  max-width: 380px;
+  width: 100%;
+}
 
 .brand-logo {
-  font-family: var(--sans);
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
   margin-bottom: 12px;
 }
-.logo-bracket { color: var(--accent); }
-.logo-text { color: var(--text); margin: 0 4px; }
+
+.brand-logo-img {
+  width: 186px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.logo-bracket {
+  color: var(--accent);
+}
+
+.logo-text {
+  color: var(--text);
+  margin: 0 4px;
+}
 
 .brand-title {
   font-family: var(--sans);
@@ -281,6 +266,7 @@ async function handleRegister() {
   margin-bottom: 36px;
   overflow: hidden;
 }
+
 .code-bar {
   display: flex;
   align-items: center;
@@ -289,18 +275,31 @@ async function handleRegister() {
   background: var(--bg-3);
   border-bottom: 1px solid var(--border);
 }
+
 .dot {
-  width: 9px; height: 9px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
 }
-.dot.red { background: #ff5f57; }
-.dot.yellow { background: #febc2e; }
-.dot.green { background: #28c840; }
+
+.dot.red {
+  background: #ff5f57;
+}
+
+.dot.yellow {
+  background: #febc2e;
+}
+
+.dot.green {
+  background: #28c840;
+}
+
 .code-title {
   font-size: 11px;
   color: var(--text-dim);
   margin-left: auto;
 }
+
 .code-body {
   padding: 14px 16px;
   font-size: 13px;
@@ -308,13 +307,24 @@ async function handleRegister() {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.code-prompt { color: var(--accent); margin-right: 8px; }
-.code-cmd { color: var(--text-muted); }
+
+.code-prompt {
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+.code-cmd {
+  color: var(--text-muted);
+}
+
 .code-highlight {
   color: var(--accent);
   font-weight: 700;
 }
-.code-op { color: var(--text-dim); }
+
+.code-op {
+  color: var(--text-dim);
+}
 
 /* Feature list */
 .feature-list {
@@ -323,6 +333,7 @@ async function handleRegister() {
   flex-direction: column;
   gap: 10px;
 }
+
 .feature-list li {
   display: flex;
   align-items: center;
@@ -330,7 +341,11 @@ async function handleRegister() {
   font-size: 13px;
   color: var(--text-muted);
 }
-.feat-icon { color: var(--accent); font-size: 10px; }
+
+.feat-icon {
+  color: var(--accent);
+  font-size: 10px;
+}
 
 /* Form panel */
 .form-panel {
@@ -342,9 +357,14 @@ async function handleRegister() {
   background: var(--bg);
 }
 
-.form-inner { width: 100%; max-width: 340px; }
+.form-inner {
+  width: 100%;
+  max-width: 340px;
+}
 
-.form-header { margin-bottom: 32px; }
+.form-header {
+  margin-bottom: 32px;
+}
 
 .form-title {
   font-family: var(--sans);
@@ -360,6 +380,7 @@ async function handleRegister() {
   border-radius: var(--radius);
   overflow: hidden;
 }
+
 .mode-btn {
   flex: 1;
   padding: 8px;
@@ -370,14 +391,23 @@ async function handleRegister() {
   letter-spacing: 0.08em;
   transition: all var(--transition);
 }
+
 .mode-btn.active {
   background: var(--accent);
   color: var(--bg);
 }
-.mode-btn:hover:not(.active) { color: var(--text); background: var(--bg-3); }
+
+.mode-btn:hover:not(.active) {
+  color: var(--text);
+  background: var(--bg-3);
+}
 
 /* Form */
-.auth-form { display: flex; flex-direction: column; gap: 20px; }
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
 .form-error {
   display: flex;
@@ -390,6 +420,7 @@ async function handleRegister() {
   color: var(--red);
   font-size: 12px;
 }
+
 .form-success {
   display: flex;
   align-items: center;
@@ -402,7 +433,12 @@ async function handleRegister() {
   font-size: 12px;
 }
 
-.field { display: flex; flex-direction: column; gap: 6px; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .field-label {
   font-size: 10px;
   font-weight: 600;
@@ -410,7 +446,10 @@ async function handleRegister() {
   color: var(--text-muted);
 }
 
-.input-wrap { position: relative; display: flex; }
+.input-wrap {
+  position: relative;
+  display: flex;
+}
 
 .field-input {
   width: 100%;
@@ -422,12 +461,20 @@ async function handleRegister() {
   font-size: 13px;
   transition: border-color var(--transition);
 }
-.field-input:focus { border-color: var(--accent); }
-.field-input::placeholder { color: var(--text-dim); }
+
+.field-input:focus {
+  border-color: var(--accent);
+}
+
+.field-input::placeholder {
+  color: var(--text-dim);
+}
 
 .pass-toggle {
   position: absolute;
-  right: 0; top: 0; bottom: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   padding: 0 14px;
   background: transparent;
   color: var(--text-muted);
@@ -437,7 +484,10 @@ async function handleRegister() {
   border-left: 1px solid var(--border);
   transition: color var(--transition);
 }
-.pass-toggle:hover { color: var(--accent); }
+
+.pass-toggle:hover {
+  color: var(--accent);
+}
 
 .submit-btn {
   padding: 13px;
@@ -451,18 +501,28 @@ async function handleRegister() {
   transition: all var(--transition);
   margin-top: 4px;
 }
+
 .submit-btn:hover:not(:disabled) {
   background: #00cc70;
   transform: translateY(-1px);
   box-shadow: 0 4px 20px var(--accent-glow);
 }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .btn-loader {
   display: inline-block;
   animation: spin 0.6s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .form-footer {
   display: flex;
@@ -472,12 +532,24 @@ async function handleRegister() {
   font-size: 11px;
   color: var(--text-dim);
 }
-.footer-dot { color: var(--border-bright); }
+
+.footer-dot {
+  color: var(--border-bright);
+}
 
 /* Responsive */
 @media (max-width: 768px) {
-  .auth-layout { flex-direction: column; }
-  .brand-panel { display: none; }
-  .form-panel { width: 100%; padding: 40px 24px; }
+  .auth-layout {
+    flex-direction: column;
+  }
+
+  .brand-panel {
+    display: none;
+  }
+
+  .form-panel {
+    width: 100%;
+    padding: 40px 24px;
+  }
 }
 </style>

@@ -1,12 +1,10 @@
 # introduction
 
-A Claude based UI, for the [Winget_Server_API](https://github.com/cheapgriffy/Winget-Serv-Server) repo as a prototype for testing API usage
-and benchmarking claude capabilities.
-Consider this a temporary front end for Winget_Server_API
+A Vue 3 UI prototype for the PipeLine API.
 
-# Winget-Serv UI
+# PipeLine UI
 
-Vue 3 + Vite frontend for the Winget-Serv API.
+Vue 3 + Vite frontend for the PipeLine API.
 
 ## Setup
 
@@ -22,11 +20,12 @@ npm run dev
 ```bash
 npm run build
 ```
+
 #### 💡 Do not forget to edit .env-template values before building
 
-This will generate a ``./dist/`` file on your project directory,
+This will generate a `./dist/` file on your project directory,
 Use this to host it on you're web-server of choice
-*This were only tested on Apache2 for now, contact me if you're having troubles with other webservers*
+_This were only tested on Apache2 for now, contact me if you're having troubles with other webservers_
 
 ## Project structure
 
