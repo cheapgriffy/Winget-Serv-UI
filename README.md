@@ -1,7 +1,3 @@
-# introduction
-
-A Vue 3 UI prototype for the PipeLine API.
-
 # PipeLine UI
 
 Vue 3 + Vite frontend for the PipeLine API.
@@ -10,7 +6,7 @@ Vue 3 + Vite frontend for the PipeLine API.
 
 ```bash
 npm install
-cp .env.example .env
+cp .env-template .env
 # Edit .env and set VITE_API_URL to your API base URL
 npm run dev
 ```
@@ -21,28 +17,37 @@ npm run dev
 npm run build
 ```
 
-#### 💡 Do not forget to edit .env-template values before building
+## Preview
 
-This will generate a `./dist/` file on your project directory,
-Use this to host it on you're web-server of choice
-_This were only tested on Apache2 for now, contact me if you're having troubles with other webservers_
+```bash
+npm run preview
+```
+
+#### Do not forget to edit `.env-template` values before building
+
+Building generates the `./dist/` directory in the project root.
+Use this output with your preferred web server.
+_This was only tested on Apache2 so far; if you run into issues with other servers, please check your server configuration._
 
 ## Project structure
 
 ```
 src/
-├── api/          # Axios API layer (auth + scripts)
-├── assets/       # Global CSS variables & styles
+├── api/                    # Axios API layer (auth + scripts)
+├── assets/                 # Global CSS variables & styles
 ├── components/
-│   ├── ScriptCard.vue    # Expandable script row (view/copy/edit/delete)
-│   └── ScriptModal.vue   # Create / edit modal with line editor
-├── router/       # Vue Router (login guard + auth guard)
+│   ├── ScriptCard.vue      # Expandable script row (view/copy/edit/delete)
+│   └── ScriptModal.vue     # Create / edit modal with line editor
+├── router/                 # Vue Router (login guard + auth guard)
 ├── stores/
-│   ├── auth.js   # Pinia auth store (login, register, me, logout)
-│   └── scripts.js # Pinia scripts store (list, create, remove)
-└── views/
-    ├── LoginView.vue     # Login + Register (toggled form)
-    └── DashboardView.vue # Scripts dashboard + Profile tab
+│   ├── auth.js             # Pinia auth store (login, register, me, logout)
+│   └── scripts.js          # Pinia scripts store (list, create, remove)
+├── test/                   # Jest unit tests for stores
+├── views/
+│   ├── LoginView.vue       # Login + Register (toggled form)
+│   └── DashboardView.vue   # Scripts dashboard + Profile tab
+├── App.vue                 # Root Vue component
+└── main.js                 # App bootstrap and router/pinia setup
 ```
 
 ## Features
