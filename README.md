@@ -1,4 +1,4 @@
-# PipeLine UI
+<img width="420" height="120" alt="Pipeline_logo" src="https://github.com/user-attachments/assets/102fb072-e0d2-4a37-80d9-6337c425d709" />
 
 Vue 3 + Vite frontend for the PipeLine API.
 
