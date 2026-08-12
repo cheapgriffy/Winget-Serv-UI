@@ -18,7 +18,7 @@
           </div>
           <div class="code-body">
             <span class="code-prompt">PS&gt;</span>
-            <span class="code-cmd">irm https://script.cheapgriffy.fr/script/<span
+            <span class="code-cmd">irm https://script.cheapgriffy.com/script/<span
                 class="code-highlight">Jk3xZ2</span></span>
             <span class="code-op"> | iex</span>
           </div>
@@ -115,7 +115,7 @@
         <div class="form-footer">
           <span class="footer-label">PipeLine</span>
           <span class="footer-dot">·</span>
-          <span class="footer-label">{{pkg.version}}</span>
+          <span class="footer-label">{{ pkg.version }}</span>
         </div>
       </div>
     </div>

@@ -78,10 +78,7 @@
           </div>
         </div>
         <div class="topbar-right">
-          <div class="status-indicator">
-            <span class="status-dot"></span>
-            <span class="status-text">LIVE</span>
-          </div>
+
           <button v-if="activeTab === 'scripts'" class="new-script-btn" @click="openCreateModal">
             <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
               <path d="M5.5 1V10M1 5.5H10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
