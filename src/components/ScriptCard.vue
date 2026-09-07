@@ -91,7 +91,7 @@ const copied = ref(false)
 
 const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '')
 const command = computed(() => props.shellMode === 'Bash'
-  ? `curl -fsSL ${baseUrl}/script/${props.script.public_id} | sh`
+  ? `curl -fsSL ${baseUrl}/script/${props.script.public_id} | bash`
   : `irm ${baseUrl}/script/${props.script.public_id} | iex`)
 
 function copyLink() {
