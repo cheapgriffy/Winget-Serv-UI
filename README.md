@@ -1,6 +1,25 @@
+
+
 <img width="420" height="120" alt="Pipeline_logo" src="https://github.com/user-attachments/assets/102fb072-e0d2-4a37-80d9-6337c425d709" />
 
-Vue 3 + Vite frontend for the PipeLine API.
+# Script hosting web application
+
+## Description
+Pipeline is a script hosting service,
+
+It reduce friction when hosting public or shareable scripts
+by creating links serving directly the script, and giving a custom command to execute any remote script from one simple command.
+
+Create scripts directly on the app, or upload your file.
+Execute them on your favorite shell.
+
+
+### Executable script exapmles
+
+Powershell : `irm https://script.cheapgriffy.com/api/script/B50VTRV4 | iex`
+
+Bash : `curl -fsSL https://script.cheapgriffy.com/api/script/B50VTRV4 | bash`
+
 
 ## Setup
 
@@ -27,7 +46,7 @@ npm run preview
 
 Building generates the `./dist/` directory in the project root.
 Use this output with your preferred web server.
-_This was only tested on Apache2 so far; if you run into issues with other servers, please check your server configuration._
+_This was only tested on Apache 2 so far; if you run into issues with other servers, please check your server configuration._
 
 ## Project structure
 
