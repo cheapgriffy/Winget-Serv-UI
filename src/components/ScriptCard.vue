@@ -17,6 +17,7 @@
         </div>
       </div>
       <div class="card-right">
+        <span class="tag" :class="operatingSystemTagClass">{{ operatingSystemLabel }}</span>
         <span class="tag tag-green">{{ script.content?.length || 0 }} lines</span>
         <span class="expand-icon">{{ expanded ? '▲' : '▼' }}</span>
       </div>
@@ -90,6 +91,15 @@ const confirmDelete = ref(false)
 const copied = ref(false)
 
 const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '')
+const operatingSystemLabel = computed(() => {
+  const operatingSystem = props.script.operating_system || 'unknown'
+  return operatingSystem.charAt(0).toUpperCase() + operatingSystem.slice(1)
+})
+const operatingSystemTagClass = computed(() => ({
+  'tag-blue': props.script.operating_system === 'windows',
+  'tag-yellow': props.script.operating_system === 'linux',
+  'tag-red': !['windows', 'linux'].includes(props.script.operating_system)
+}))
 const command = computed(() => props.shellMode === 'Bash'
   ? `curl -fsSL ${baseUrl}/script/${props.script.public_id} | bash`
   : `irm ${baseUrl}/script/${props.script.public_id} | iex`)

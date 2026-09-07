@@ -26,6 +26,15 @@
         </div>
 
         <div class="field">
+          <label class="field-label">OPERATING SYSTEM <span class="required">*</span></label>
+          <select v-model="form.operating_system" class="field-input" required>
+            <option value="windows">Windows</option>
+            <option value="linux">Linux</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+
+        <div class="field">
           <div class="editor-header">
             <label class="field-label">SCRIPT LINES <span class="required">*</span></label>
             <div class="editor-actions">
@@ -84,6 +93,7 @@ const dragOverIndex = ref(null)
 const form = reactive({
   name: props.script?.name || '',
   description: props.script?.description || '',
+  operating_system: props.script?.operating_system || 'unknown',
   content: props.script?.content?.length ? [...props.script.content] : ['']
 })
 
@@ -182,6 +192,7 @@ async function handleSubmit() {
       ...(isEdit ? { id: props.script.id } : {}),
       name: form.name.trim(),
       description: form.description.trim() || null,
+      operating_system: form.operating_system,
       content: lines
     })
   } finally {
