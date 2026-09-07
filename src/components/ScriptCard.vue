@@ -5,9 +5,10 @@
       <div class="card-left">
         <div class="card-icon">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <rect x="1" y="2" width="12" height="10" rx="1" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M4 5.5 L6 7 L4 8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M7 8.5 H10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            <rect x="1" y="2" width="12" height="10" rx="1" stroke="currentColor" stroke-width="1.2" />
+            <path d="M4 5.5 L6 7 L4 8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M7 8.5 H10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
           </svg>
         </div>
         <div>
@@ -28,7 +29,7 @@
         <div v-if="script.public_id" class="link-row">
           <span class="link-label">EXEC CMD</span>
           <div class="link-box">
-            <code class="link-text">irm {{ baseUrl }}/script/{{ script.public_id }} | iex</code>
+            <code class="link-text">{{ command }}</code>
             <button class="copy-btn" @click.stop="copyLink" :class="{ copied }">
               {{ copied ? '✓ COPIED' : 'COPY' }}
             </button>
@@ -42,11 +43,7 @@
             <span class="preview-count">{{ script.content?.length || 0 }} lines</span>
           </div>
           <div class="preview-lines">
-            <div
-              v-for="(line, i) in script.content"
-              :key="i"
-              class="preview-line"
-            >
+            <div v-for="(line, i) in script.content" :key="i" class="preview-line">
               <span class="line-num">{{ String(i + 1).padStart(2, '0') }}</span>
               <span class="line-text">{{ line }}</span>
             </div>
@@ -79,10 +76,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
-  script: { type: Object, required: true }
+  script: { type: Object, required: true },
+  shellMode: { type: String, default: 'Powershell' }
 })
 
 defineEmits(['edit', 'delete'])
@@ -91,11 +89,13 @@ const expanded = ref(false)
 const confirmDelete = ref(false)
 const copied = ref(false)
 
-const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '')
+const command = computed(() => props.shellMode === 'Bash'
+  ? `curl -fsSL ${baseUrl}/script/${props.script.public_id} | sh`
+  : `irm ${baseUrl}/script/${props.script.public_id} | iex`)
 
 function copyLink() {
-  const cmd = `irm ${baseUrl}/script/${props.script.public_id} | iex`
-  navigator.clipboard.writeText(cmd)
+  navigator.clipboard.writeText(command.value)
   copied.value = true
   setTimeout(() => { copied.value = false }, 2000)
 }
@@ -109,7 +109,9 @@ function copyLink() {
   transition: border-color var(--transition);
   overflow: hidden;
 }
-.script-card:hover, .script-card.expanded {
+
+.script-card:hover,
+.script-card.expanded {
   border-color: var(--border-bright);
 }
 
@@ -143,6 +145,7 @@ function copyLink() {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .card-desc {
   font-size: 11px;
   color: var(--text-muted);
@@ -174,13 +177,19 @@ function copyLink() {
 }
 
 /* Link row */
-.link-row { display: flex; flex-direction: column; gap: 6px; }
+.link-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .link-label {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
   color: var(--text-muted);
 }
+
 .link-box {
   display: flex;
   align-items: center;
@@ -189,6 +198,7 @@ function copyLink() {
   border-radius: var(--radius);
   overflow: hidden;
 }
+
 .link-text {
   flex: 1;
   padding: 9px 12px;
@@ -198,6 +208,7 @@ function copyLink() {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .copy-btn {
   background: transparent;
   color: var(--text-muted);
@@ -211,22 +222,35 @@ function copyLink() {
   transition: all var(--transition);
   flex-shrink: 0;
 }
-.copy-btn:hover { color: var(--accent); }
-.copy-btn.copied { color: var(--accent); }
+
+.copy-btn:hover {
+  color: var(--accent);
+}
+
+.copy-btn.copied {
+  color: var(--accent);
+}
 
 /* Preview */
-.script-preview { display: flex; flex-direction: column; gap: 8px; }
+.script-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .preview-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .preview-label {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
   color: var(--text-muted);
 }
+
 .preview-count {
   font-size: 10px;
   color: var(--text-dim);
@@ -240,13 +264,18 @@ function copyLink() {
   max-height: 200px;
   overflow-y: auto;
 }
+
 .preview-line {
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--border);
   font-size: 12px;
 }
-.preview-line:last-child { border-bottom: none; }
+
+.preview-line:last-child {
+  border-bottom: none;
+}
+
 .line-num {
   width: 36px;
   text-align: center;
@@ -256,6 +285,7 @@ function copyLink() {
   border-right: 1px solid var(--border);
   flex-shrink: 0;
 }
+
 .line-text {
   padding: 8px 12px;
   color: var(--accent);
@@ -267,6 +297,7 @@ function copyLink() {
   display: flex;
   gap: 8px;
 }
+
 .action-btn {
   padding: 7px 16px;
   font-size: 11px;
@@ -277,17 +308,21 @@ function copyLink() {
   background: transparent;
   transition: all var(--transition);
 }
+
 .action-btn.edit {
   color: var(--text-muted);
 }
+
 .action-btn.edit:hover {
   color: var(--accent);
   border-color: var(--accent);
   background: var(--accent-dim);
 }
+
 .action-btn.delete {
   color: var(--text-muted);
 }
+
 .action-btn.delete:hover {
   color: var(--red);
   border-color: var(--red);
@@ -306,13 +341,23 @@ function copyLink() {
   border-radius: var(--radius);
   flex-wrap: wrap;
 }
+
 .confirm-text {
   font-size: 12px;
   color: var(--red);
 }
-.confirm-text strong { font-weight: 700; }
-.confirm-btns { display: flex; gap: 8px; }
-.confirm-cancel, .confirm-ok {
+
+.confirm-text strong {
+  font-weight: 700;
+}
+
+.confirm-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.confirm-cancel,
+.confirm-ok {
   padding: 6px 14px;
   font-size: 11px;
   font-weight: 600;
@@ -321,16 +366,24 @@ function copyLink() {
   border: 1px solid;
   transition: all var(--transition);
 }
+
 .confirm-cancel {
   background: transparent;
   border-color: var(--border-bright);
   color: var(--text-muted);
 }
-.confirm-cancel:hover { color: var(--text); }
+
+.confirm-cancel:hover {
+  color: var(--text);
+}
+
 .confirm-ok {
   background: var(--red);
   border-color: var(--red);
   color: white;
 }
-.confirm-ok:hover { background: #cc2a2a; }
+
+.confirm-ok:hover {
+  background: #cc2a2a;
+}
 </style>

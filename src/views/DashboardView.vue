@@ -77,6 +77,7 @@
             <span class="page-subtitle">{{ pageSubtitle }}</span>
           </div>
         </div>
+        <ShellModeToggle v-model:mode="shellMode" class="topbar-mode-toggle" />
         <div class="topbar-right">
 
           <button v-if="activeTab === 'scripts'" class="new-script-btn" @click="openCreateModal">
@@ -139,8 +140,8 @@
         </div>
         <div v-else class="script-list">
           <transition-group name="slide-up">
-            <ScriptCard v-for="script in filteredScripts" :key="script.id" :script="script" @edit="openEditModal"
-              @delete="handleDelete" />
+            <ScriptCard v-for="script in filteredScripts" :key="script.id" :script="script" :shell-mode="shellMode"
+              @edit="openEditModal" @delete="handleDelete" />
           </transition-group>
         </div>
       </section>
@@ -270,6 +271,7 @@ import { useScriptStore } from '@/stores/scripts.js'
 import pipelineLogo from '@/assets/Pipeline_logo.png'
 import ScriptCard from '@/components/ScriptCard.vue'
 import ScriptModal from '@/components/ScriptModal.vue'
+import ShellModeToggle from '@/components/ShellModeToggle.vue'
 
 const auth = useAuthStore()
 const scriptStore = useScriptStore()
@@ -323,6 +325,7 @@ function navigate(tabId) {
 }
 
 // ── Scripts ──
+const shellMode = ref('Powershell')
 const searchQuery = ref('')
 const filteredScripts = computed(() => {
   if (!searchQuery.value) return scriptStore.scripts
@@ -633,6 +636,7 @@ onMounted(() => { scriptStore.fetchScripts() })
 
 /* ─── Topbar ─── */
 .topbar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -648,6 +652,12 @@ onMounted(() => { scriptStore.fetchScripts() })
   align-items: center;
   gap: 12px;
   min-width: 0;
+}
+
+.topbar-mode-toggle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .hamburger {
