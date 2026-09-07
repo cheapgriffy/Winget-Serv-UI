@@ -346,7 +346,12 @@ function closeModal() { showModal.value = false; editingScript.value = null }
 async function handleModalSubmit(payload) {
   if (editingScript.value) {
     await scriptStore.removeScript(payload.id)
-    const res = await scriptStore.createScript({ name: payload.name, description: payload.description, content: payload.content })
+    const res = await scriptStore.createScript({
+      name: payload.name,
+      description: payload.description,
+      operating_system: payload.operating_system,
+      content: payload.content
+    })
     if (res.success) { showToast('Script updated'); closeModal() }
     else showToast(res.error, 'error')
   } else {
