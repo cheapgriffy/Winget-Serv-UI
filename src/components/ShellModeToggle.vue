@@ -1,78 +1,72 @@
 <template>
-    <button class="shell-mode-toggle" type="button" :aria-label="`Switch shell mode. Current mode: ${mode}`"
-        :title="`Switch to ${nextMode}`" @click="$emit('update:mode', nextMode)">
-        <span class="mode-prompt">&gt;_</span>
-        <span class="mode-name">{{ mode }}</span>
-        <span class="mode-switch" aria-hidden="true">&#8644;</span>
-    </button>
+    <div class="shell-mode-toggle" role="group" aria-label="Shell mode">
+        <button type="button" :class="['mode-option', { active: mode === 'Powershell' }]"
+            :aria-pressed="mode === 'Powershell'" @click="$emit('update:mode', 'Powershell')">
+            POWERSHELL
+        </button>
+        <button type="button" :class="['mode-option', { active: mode === 'Bash' }]" :aria-pressed="mode === 'Bash'"
+            @click="$emit('update:mode', 'Bash')">
+            BASH
+        </button>
+    </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-
 const props = defineProps({
     mode: { type: String, required: true }
 })
 
 defineEmits(['update:mode'])
 
-const nextMode = computed(() => props.mode === 'Powershell' ? 'Bash' : 'Powershell')
 </script>
 
 <style scoped>
 .shell-mode-toggle {
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 144px;
-    justify-content: center;
-    padding: 7px 12px;
+    align-items: stretch;
+    padding: 3px;
     background: var(--bg-2);
     border: 1px solid var(--border-bright);
+    border-radius: var(--radius);
+    box-shadow: inset 0 0 0 1px var(--bg);
+}
+
+.mode-option {
+    min-width: 88px;
+    padding: 5px 10px;
+    background: transparent;
+    border: 0;
     border-radius: var(--radius);
     color: var(--text-muted);
     font-family: var(--mono);
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.06em;
-    transition: color var(--transition), border-color var(--transition), background var(--transition);
+    letter-spacing: 0.05em;
+    transition: color var(--transition), background var(--transition), box-shadow var(--transition);
 }
 
-.shell-mode-toggle:hover,
-.shell-mode-toggle:focus-visible {
-    color: var(--accent);
-    border-color: var(--accent);
-    background: var(--accent-dim);
+.mode-option:hover,
+.mode-option:focus-visible {
+    color: var(--text);
     outline: none;
 }
 
-.mode-prompt {
-    color: var(--accent);
-    font-size: 11px;
+.mode-option.active {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 10px var(--accent-glow);
 }
 
-.mode-name {
-    min-width: 65px;
-}
-
-.mode-switch {
-    color: var(--text-dim);
-    font-size: 13px;
+.mode-option.active:hover,
+.mode-option.active:focus-visible {
+    background: #00cc70;
+    color: var(--bg);
 }
 
 @media (max-width: 520px) {
-    .shell-mode-toggle {
+    .mode-option {
         min-width: 0;
-        padding: 7px 9px;
-    }
-
-    .mode-prompt,
-    .mode-switch {
-        display: none;
-    }
-
-    .mode-name {
-        min-width: 0;
+        padding: 5px 8px;
     }
 }
 </style>
